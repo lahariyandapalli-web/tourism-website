@@ -1,0 +1,6 @@
+{
+  "name": "RoamWise - Smart Budget City & Attraction Explorer",
+  "description": "Explore top tourist attractions with entry fees, famous local food stalls with dish prices, and calculate budget-friendly trip estimations for any city.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
