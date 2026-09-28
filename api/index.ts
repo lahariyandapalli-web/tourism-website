@@ -693,5 +693,52 @@ Respond strictly according to the specified JSON schema.`;
 app.post('/api/city-guide', handleCityGuide);
 app.post('/city-guide', handleCityGuide);
 
+// n8n Webhook Chatbot Proxy Endpoint
+const N8N_WEBHOOK_URL = 'https://harshitha916.app.n8n.cloud/webhook/e320861e-f3c1-44cb-aa92-3a7467fa0139/chat';
+
+const handleN8nChat = async (req: Request, res: Response) => {
+  try {
+    const { chatInput, message, sessionId } = req.body || {};
+    const text = (chatInput || message || '').trim();
+
+    if (!text) {
+      return res.status(400).json({ error: 'Message cannot be empty' });
+    }
+
+    const n8nResponse = await fetch(N8N_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chatInput: text,
+        message: text,
+        sessionId: sessionId || `roamwise-session-${Date.now()}`,
+      }),
+    });
+
+    if (!n8nResponse.ok) {
+      const errText = await n8nResponse.text();
+      return res.status(n8nResponse.status).json({
+        error: `n8n webhook error: ${n8nResponse.statusText}`,
+        details: errText,
+      });
+    }
+
+    const data = await n8nResponse.json();
+    return res.json(data);
+  } catch (err: any) {
+    console.error('n8n proxy error:', err);
+    return res.status(500).json({
+      error: 'Failed to contact n8n chat service',
+      message: err?.message || 'Unknown network error',
+    });
+  }
+};
+
+app.post('/api/n8n-chat', handleN8nChat);
+app.post('/n8n-chat', handleN8nChat);
+
 // Export for Vercel Serverless Function
 export default app;
+

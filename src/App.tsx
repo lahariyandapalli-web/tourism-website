@@ -7,6 +7,7 @@ import { FoodStallsSection } from './components/FoodStallsSection';
 import { BudgetEstimatorSection } from './components/BudgetEstimatorSection';
 import { TravelHacksSection } from './components/TravelHacksSection';
 import { SavedTripDrawer } from './components/SavedTripDrawer';
+import { ChatbotWidget } from './components/ChatbotWidget';
 import { Footer } from './components/Footer';
 import { CURATED_CITIES } from './data/curatedDestinations';
 import {
@@ -289,8 +290,12 @@ export default function App() {
         days={selectedDays}
       />
 
+      {/* n8n Powered AI Travel Assistant Chatbot Widget */}
+      <ChatbotWidget activeCityName={guide.city} />
+
       {/* Footer */}
       <Footer />
+
     </div>
   );
 }
